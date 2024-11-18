@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Interview Platform</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background-color: #f0f4f8; /* Soft light blue background */
+    }
+    .container {
+      width: 90%;
+      max-width: 600px;
+      background: #e3f2fd; /* Light blue for container background */
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Box shadow for container */
+    }
+    .screen {
+      display: none;
+    }
+    .screen.active {
+      display: block;
+    }
+    h2 {
+      color: #333;
+      font-size: 24px;
+      text-align: center;
+    }
+    button {
+      margin-top: 20px;
+      padding: 12px 25px;
+      font-size: 16px;
+      color: white;
+      background-color: #007bff; /* Primary blue button */
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Box shadow for buttons */
+      transition: background-color 0.3s, transform 0.2s;
+    }
+    button:hover {
+      background-color: #0056b3;
+      transform: translateY(-2px); /* Lift button on hover */
+    }
+    .status {
+      margin: 10px 0;
+      font-size: 18px;
+      color: #4caf50;
+    }
+    ul {
+      text-align: left;
+      color: #555;
+      padding-left: 20px;
+    }
+    textarea {
+      width: 100%;
+      margin-top: 10px;
+      font-size: 14px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Light shadow for input */
+      box-sizing: border-box;
+    }
+    .answers {
+      margin-top: 15px;
+      color: #333;
+    }
+    .answers label {
+      display: block;
+      margin-bottom: 10px;
+    }
+    .answers input {
+      margin-right: 10px;
+    }
+    .timer {
+      margin: 10px 0;
+      font-size: 18px;
+      color: #e74c3c;
+    }
+    .score {
+      font-size: 20px;
+      color: #28a745;
+      margin-top: 20px;
+      font-weight: bold;
+      text-align: center;
+    }
+    #feedback-screen {
+      background-color: #e8f5e9; /* Light green background for feedback */
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    .star-rating {
+      margin-top: 20px;
+      text-align: center;
+    }
+    .star-rating span {
+      font-size: 30px;
+      color: #dcdcdc; /* Gray for unselected stars */
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+    .star-rating span:hover,
+    .star-rating span.active {
+      color: #ffc107; /* Gold for selected stars */
+    }
+    #submit-feedback {
+      margin-top: 20px;
+      background-color: #28a745; /* Green button */
+    }
+    #submit-feedback:hover {
+      background-color: #218838;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Pre-Interview Setup Screen -->
+    <div id="setup-screen" class="screen active">
+      <h2>Pre-Interview Setup</h2>
+      <p>Ensure your camera and microphone are working.</p>
+      <div class="status">✅ Camera: Ready</div>
+      <div class="status">✅ Microphone: Ready</div>
+      <button onclick="goToScreen('instructions-screen')">Proceed to Instructions</button>
+    </div>
+
+    <!-- Instructions Screen -->
+    <div id="instructions-screen" class="screen">
+      <h2>Interview Instructions</h2>
+      <ul>
+        <li>Ensure a stable internet connection.</li>
+        <li>Answer each question clearly and concisely.</li>
+        <li>Maintain eye contact with the camera.</li>
+        <li>You can skip questions if needed.</li>
+      </ul>
+      <button onclick="goToScreen('question-screen-1')">Start Interview</button>
+    </div>
+
+    <!-- Question 1 Screen -->
+    <div id="question-screen-1" class="screen">
+      <h2>Question 1</h2>
+      <p>What is your experience with AI technologies?</p>
+      <textarea placeholder="Type your answer here..."></textarea>
+      <button onclick="goToScreen('question-screen-2')">Next Question</button>
+    </div>
+
+    <!-- Question 2 Screen -->
+    <div id="question-screen-2" class="screen">
+      <h2>Question 2</h2>
+      <p>Which of the following is a type of supervised learning algorithm?</p>
+      <div class="answers">
+        <label><input type="radio" name="q2" value="A"> K-Means Clustering</label>
+        <label><input type="radio" name="q2" value="B"> Decision Tree</label>
+        <label><input type="radio" name="q2" value="C"> Principal Component Analysis</label>
+        <label><input type="radio" name="q2" value="D"> Apriori Algorithm</label>
+      </div>
+      <button onclick="goToScreen('question-screen-3')">Next Question</button>
+    </div>
+
+    <!-- Question 3 Screen -->
+    <div id="question-screen-3" class="screen">
+      <h2>Question 3</h2>
+      <p>Which company developed the AI model called ChatGPT?</p>
+      <div class="answers">
+        <label><input type="radio" name="q3" value="A"> Google</label>
+        <label><input type="radio" name="q3" value="B"> OpenAI</label>
+        <label><input type="radio" name="q3" value="C"> Microsoft</label>
+        <label><input type="radio" name="q3" value="D"> IBM</label>
+      </div>
+      <button onclick="showResults()">Finish</button>
+    </div>
+
+    <!-- Feedback Screen -->
+    <div id="feedback-screen" class="screen">
+      <h2>Interview Complete</h2>
+      <p>Thank you for participating! Your results are below:</p>
+      <div id="score" class="score"></div>
+      <div class="star-rating">
+        <span data-value="1">&#9733;</span>
+        <span data-value="2">&#9733;</span>
+        <span data-value="3">&#9733;</span>
+        <span data-value="4">&#9733;</span>
+        <span data-value="5">&#9733;</span>
+      </div>
+      <button id="submit-feedback" onclick="submitFeedback()">Submit Feedback</button>
+      <button onclick="goToScreen('setup-screen')">Restart</button>
+    </div>
+  </div>
+
+  <script>
+    const correctAnswers = {
+      q2: 'B', // Decision Tree
+      q3: 'B'  // OpenAI
+    };
+
+    function goToScreen(screenId) {
+      const screens = document.querySelectorAll('.screen');
+      screens.forEach(screen => screen.classList.remove('active'));
+      document.getElementById(screenId).classList.add('active');
+    }
+
+    function showResults() {
+      let score = 0;
+
+      for (const [question, correctAnswer] of Object.entries(correctAnswers)) {
+        const userAnswer = document.querySelector(`input[name="${question}"]:checked`);
+        if (userAnswer && userAnswer.value === correctAnswer) {
+          score++;
+        }
+      }
+
+      document.getElementById('score').textContent = `You scored ${score} out of ${Object.keys(correctAnswers).length}.`;
+      goToScreen('feedback-screen');
+    }
+
+    function submitFeedback() {
+      const stars = document.querySelectorAll('.star-rating span');
+      let rating = 0;
+
+      stars.forEach(star => {
+        if (star.classList.contains('active')) {
+          rating = Math.max(rating, Number(star.dataset.value));
+        }
+      });
+
+      alert(`Thank you for your feedback! You rated us ${rating} stars.`);
+    }
+
+    document.querySelectorAll('.star-rating span').forEach(star => {
+      star.addEventListener('click', () => {
+        document.querySelectorAll('.star-rating span').forEach(s => s.classList.remove('active'));
+        star.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>
+
+
+
